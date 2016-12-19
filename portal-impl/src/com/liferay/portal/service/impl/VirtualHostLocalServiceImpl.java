@@ -15,6 +15,7 @@
 package com.liferay.portal.service.impl;
 
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
+import com.liferay.portal.kernel.exception.NoSuchVirtualHostException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
@@ -55,6 +56,49 @@ public class VirtualHostLocalServiceImpl
 	@Override
 	public VirtualHost getVirtualHost(String hostname) throws PortalException {
 		return virtualHostPersistence.findByHostname(hostname);
+	}
+
+	@Override
+	public VirtualHost removeVirtualHost(long companyId, final long layoutSetId)
+		throws NoSuchVirtualHostException {
+
+		VirtualHost virtualHost = virtualHostPersistence.removeByC_L(
+			companyId, layoutSetId);
+
+		LayoutSet layoutSet = layoutSetPersistence.fetchByPrimaryKey(
+			layoutSetId);
+
+		if ((layoutSet == null) &&
+			Validator.isNotNull(PropsValues.VIRTUAL_HOSTS_DEFAULT_SITE_NAME)) {
+
+			Group group = groupPersistence.fetchByC_GK(
+				companyId, PropsValues.VIRTUAL_HOSTS_DEFAULT_SITE_NAME);
+
+			if (group != null) {
+				layoutSet = layoutSetPersistence.fetchByG_P(
+					group.getGroupId(), false);
+			}
+		}
+
+		if (layoutSet != null) {
+			layoutSetPersistence.clearCache(layoutSet);
+
+			TransactionCommitCallbackUtil.registerCallback(
+				new Callable<Void>() {
+
+					@Override
+					public Void call() {
+						EntityCacheUtil.removeResult(
+							LayoutSetModelImpl.ENTITY_CACHE_ENABLED,
+							LayoutSetImpl.class, layoutSetId);
+
+						return null;
+					}
+
+				});
+		}
+
+		return virtualHost;
 	}
 
 	@Override
