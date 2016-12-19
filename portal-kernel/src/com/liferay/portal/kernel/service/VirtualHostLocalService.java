@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.Projection;
+import com.liferay.portal.kernel.exception.NoSuchVirtualHostException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.model.PersistedModel;
@@ -141,6 +142,9 @@ public interface VirtualHostLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public VirtualHost getVirtualHost(long virtualHostId)
 		throws PortalException;
+
+	public VirtualHost removeVirtualHost(long companyId, long layoutSetId)
+		throws NoSuchVirtualHostException;
 
 	/**
 	* Updates the virtual host in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

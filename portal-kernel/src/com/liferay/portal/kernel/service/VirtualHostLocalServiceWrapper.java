@@ -159,6 +159,13 @@ public class VirtualHostLocalServiceWrapper implements VirtualHostLocalService,
 		return _virtualHostLocalService.getVirtualHost(virtualHostId);
 	}
 
+	@Override
+	public com.liferay.portal.kernel.model.VirtualHost removeVirtualHost(
+		long companyId, long layoutSetId)
+		throws com.liferay.portal.kernel.exception.NoSuchVirtualHostException {
+		return _virtualHostLocalService.removeVirtualHost(companyId, layoutSetId);
+	}
+
 	/**
 	* Updates the virtual host in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
