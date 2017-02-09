@@ -1,10 +1,13 @@
 <component name="libraryTable">
-	<library name="portal">
-		<CLASSES>
-			<root url="file://$PROJECT_DIR$/lib/portal" />
-		</CLASSES>
-		<JAVADOC />
-		<SOURCES />
-		<jarDirectory url="file://$PROJECT_DIR$/lib/portal" recursive="false" />
-	</library>
+  <library name="portal">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/lib/portal" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/lib/portal" />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/lib/portal" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/portal" recursive="false" type="SOURCES" />
+  </library>
 </component>

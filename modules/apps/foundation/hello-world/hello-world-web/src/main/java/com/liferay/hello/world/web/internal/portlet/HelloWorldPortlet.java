@@ -15,18 +15,30 @@
 package com.liferay.hello.world.web.internal.portlet;
 
 import com.liferay.hello.world.web.internal.constants.HelloWorldPortletKeys;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.ReleaseInfo;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import com.liferay.journal.model.JournalArticle;
+import com.liferay.journal.service.JournalArticleServiceUtil;
 
+import com.liferay.portal.kernel.util.WebKeys;
 import org.osgi.service.component.annotations.Component;
 
 /**
@@ -62,12 +74,50 @@ public class HelloWorldPortlet extends MVCPortlet {
 			RenderRequest renderRequest, RenderResponse renderResponse)
 		throws IOException, PortletException {
 
+		final long companyId = PortalUtil.getDefaultCompanyId();
+		long defGroupId = 0;
+		try {
+			defGroupId = GroupLocalServiceUtil.getGroup(companyId, "Guest").getGroupId();
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+
+		User currentUser = null;
+		try {
+			currentUser = PortalUtil.getUser(renderRequest);
+		} catch (PortalException e1) {
+			e1.printStackTrace();
+		} catch (SystemException e1) {
+			e1.printStackTrace();
+		}
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+		if (currentUser == null) {
+			currentUser = themeDisplay.getUser();
+		}
+
+		String s2 = "";
+		//List<JournalArticle> myResults = new ArrayList<JournalArticle>();
+		OrderByComparator obc = null;
+		MyTestClass mtc = new MyTestClass();
+		List<JournalArticle> myResults = mtc.getList(defGroupId,obc);
+//		try {
+//			List<JournalArticle>  myResults2 = JournalArticleServiceUtil.getArticles(defGroupId, 0, 0, 10000, obc);
+//			// myResults = JournalArticleServiceUtil.getArticles(defGroupId, 0);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			//e.printStackTrace();
+//		}
+
 		renderResponse.setContentType(ContentTypes.TEXT_HTML_UTF8);
 
 		PrintWriter printWriter = renderResponse.getWriter();
 
+		String s = String.format("%s %s  -----  %s -----", defGroupId, currentUser.getScreenName(), myResults.size());
 		printWriter.print(
-			"Welcome to ".concat(ReleaseInfo.getReleaseInfo()).concat("."));
+			s + "Welcome to ".concat(ReleaseInfo.getReleaseInfo()).concat("."));
 	}
 
 }
