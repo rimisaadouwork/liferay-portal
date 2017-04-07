@@ -99,17 +99,17 @@ public class HelloWorldPortlet extends MVCPortlet {
 		}
 
 		String s2 = "";
-		//List<JournalArticle> myResults = new ArrayList<JournalArticle>();
+		List<JournalArticle> myResults = new ArrayList<JournalArticle>();
 		OrderByComparator obc = null;
-		MyTestClass mtc = new MyTestClass();
-		List<JournalArticle> myResults = mtc.getList(defGroupId,obc);
-//		try {
-//			List<JournalArticle>  myResults2 = JournalArticleServiceUtil.getArticles(defGroupId, 0, 0, 10000, obc);
-//			// myResults = JournalArticleServiceUtil.getArticles(defGroupId, 0);
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			//e.printStackTrace();
-//		}
+		//MyTestClass mtc = new MyTestClass();
+		//List<JournalArticle> myResults = mtc.getList(defGroupId,obc);
+		try {
+			myResults = JournalArticleServiceUtil.getArticles(defGroupId, 0, 0, 10000, obc);
+			// myResults = JournalArticleServiceUtil.getArticles(defGroupId, 0);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		renderResponse.setContentType(ContentTypes.TEXT_HTML_UTF8);
 
