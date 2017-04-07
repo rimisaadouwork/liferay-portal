@@ -15,6 +15,7 @@
 package com.liferay.hello.world.web.internal.portlet;
 
 import com.liferay.hello.world.web.internal.constants.HelloWorldPortletKeys;
+import com.liferay.journal.service.JournalArticleLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.model.User;
@@ -99,12 +100,12 @@ public class HelloWorldPortlet extends MVCPortlet {
 		}
 
 		String s2 = "";
-		List<JournalArticle> myResults = new ArrayList<JournalArticle>();
+		//List<JournalArticle> myResults = new ArrayList<JournalArticle>();
 		OrderByComparator obc = null;
-		//MyTestClass mtc = new MyTestClass();
-		//List<JournalArticle> myResults = mtc.getList(defGroupId,obc);
+		MyTestClass mtc = new MyTestClass();
+		List<JournalArticle> myResults = mtc.getList(defGroupId,obc);
 		try {
-			myResults = JournalArticleServiceUtil.getArticles(defGroupId, 0, 0, 10000, obc);
+			//myResults = JournalArticleLocalServiceUtil.getArticles(defGroupId, 0, 0, 10000, obc);
 			// myResults = JournalArticleServiceUtil.getArticles(defGroupId, 0);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -115,9 +116,8 @@ public class HelloWorldPortlet extends MVCPortlet {
 
 		PrintWriter printWriter = renderResponse.getWriter();
 
-		String s = String.format("%s %s  -----  %s -----", defGroupId, currentUser.getScreenName(), myResults.size());
-		printWriter.print(
-			s + "Welcome to ".concat(ReleaseInfo.getReleaseInfo()).concat("."));
+		String s = String.format("Group Id = %s --- User = %s --- article count = %s ---", defGroupId, currentUser.getScreenName(), myResults.size());
+		printWriter.print(s);
 	}
 
 }
