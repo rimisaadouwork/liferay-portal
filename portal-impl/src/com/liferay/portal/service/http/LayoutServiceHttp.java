@@ -15,7 +15,8 @@
 package com.liferay.portal.service.http;
 
 import aQute.bnd.annotation.ProviderType;
-
+import com.liferay.portal.kernel.exception.NoSuchLayoutException;
+import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.auth.HttpPrincipal;
@@ -1176,6 +1177,27 @@ public class LayoutServiceHttp {
 
 			throw se;
 		}
+	}
+
+	public static boolean hasLayoutByUuidAndGroupId(
+		HttpPrincipal httpPrincipal, java.lang.String uuid, long groupId,
+		boolean privateLayout)
+		throws com.liferay.portal.kernel.exception.PortalException,
+		com.liferay.portal.kernel.exception.SystemException {
+
+		try {
+			Layout layout = getLayoutByUuidAndGroupId(
+				httpPrincipal, uuid, groupId, privateLayout);
+
+			if (layout != null) {
+				return true;
+			}
+		}
+		catch (NoSuchLayoutException nsle) {
+			_log.info("Layout does not exist " + nsle);
+		}
+
+		return false;
 	}
 
 	public static void importLayouts(HttpPrincipal httpPrincipal,
