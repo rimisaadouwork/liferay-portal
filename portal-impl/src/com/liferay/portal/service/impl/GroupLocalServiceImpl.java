@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.backgroundtask.BackgroundTask;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskConstants;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskManagerUtil;
 import com.liferay.portal.kernel.cache.thread.local.ThreadLocalCachable;
+import com.liferay.portal.kernel.cluster.Clusterable;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.DuplicateGroupException;
 import com.liferay.portal.kernel.exception.GroupFriendlyURLException;
@@ -911,6 +912,7 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 		return deleteGroup(group);
 	}
 
+	@Clusterable(onMaster = true)
 	@Override
 	public synchronized void disableStaging(long groupId)
 		throws PortalException {
@@ -947,6 +949,7 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 		}
 	}
 
+	@Clusterable(onMaster = true)
 	@Override
 	public synchronized void enableStaging(long groupId)
 		throws PortalException {
